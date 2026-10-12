@@ -24,6 +24,16 @@
       "category": "productivity"
     },
     {
+      "name": "cgp-crew",
+      "description": "Give a coding job to /cgp-crew and your session leads five worker agents through it: it plans, designs, briefs and reviews, and the workers write the code.",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/crypto-gameplan/cgp-crew.git",
+        "ref": "stable"
+      },
+      "category": "productivity"
+    },
+    {
       "name": "blast-radius",
       "description": "Holds risky shell commands (rm -rf, git reset --hard, git clean, force push, migrations) and shows what they would change, with Proceed and Cancel buttons. By Anthropic.",
       "source": {
