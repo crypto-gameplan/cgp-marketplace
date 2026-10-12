@@ -30,12 +30,10 @@ Run `/reload-plugins` or restart Claude Code afterwards.
 
 | Plugin | What it does | Source |
 |---|---|---|
-| `cgp-essentials` | The skills Crypto Gameplan uses every day | [plugins/cgp-essentials](plugins/cgp-essentials) |
+| `cgp-essentials` | The skills Crypto Gameplan uses every day: `humanizer`, `writing-for-agents`, `grill-me`/`grilling`, `tdd`, `research`. Copied from their authors with their MIT licenses, see [THIRD_PARTY.md](plugins/cgp-essentials/THIRD_PARTY.md) | [plugins/cgp-essentials](plugins/cgp-essentials) |
 | `cgp-effort` | Picks the reasoning effort for every prompt, with a prompt-cache countdown and one-click Compact and Handoff | [crypto-gameplan/cgp-effort](https://github.com/crypto-gameplan/cgp-effort) |
 | `cgp-crew` | Give a coding job to `/cgp-crew` and your session leads five worker agents through it: it plans, designs, briefs and reviews, and the workers write the code | [crypto-gameplan/cgp-crew](https://github.com/crypto-gameplan/cgp-crew) |
 | `blast-radius` | Holds risky shell commands such as `rm -rf`, `git reset --hard` or a force push and shows what they would change, with Proceed and Cancel. A mod by Anthropic; needs Claude Code 2.1.287 or later | [anthropics/claude-code-playground](https://github.com/anthropics/claude-code-playground/tree/main/claude-code/mods/blast-radius), pinned to a checked commit |
-| `humanizer` | Rewrites AI-sounding text so it reads like a person wrote it, without changing what it says. By blader (MIT) | [blader/humanizer](https://github.com/blader/humanizer), pinned to a checked commit |
-| `mattpocock-skills` | Matt Pocock's engineering skills: grill-me, writing-for-agents, TDD, research, specs and tickets, code review and more (MIT) | [mattpocock/skills](https://github.com/mattpocock/skills), pinned to release v1.3.1 |
 
 ## Maintaining the catalog
 
