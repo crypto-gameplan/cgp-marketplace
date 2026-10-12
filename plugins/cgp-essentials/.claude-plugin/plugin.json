@@ -1,0 +1,12 @@
+{
+  "name": "cgp-essentials",
+  "version": "0.1.0",
+  "description": "The skills Crypto Gameplan uses every day, bundled for the CGP AI Lab.",
+  "author": {
+    "name": "Crypto Gameplan",
+    "url": "https://github.com/crypto-gameplan"
+  },
+  "homepage": "https://github.com/crypto-gameplan/cgp-marketplace",
+  "repository": "https://github.com/crypto-gameplan/cgp-marketplace",
+  "license": "MIT"
+}

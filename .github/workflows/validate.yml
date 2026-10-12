@@ -1,0 +1,27 @@
+name: Validate
+
+# Checks the catalog and every plugin in plugins/ on each push and pull request.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Same Claude Code version cgp-effort's CI checks against; raise both together.
+      - run: npm install -g @anthropic-ai/claude-code@2.1.296
+      - name: Catalog
+        run: claude plugin validate --strict .
+      - name: Plugins
+        run: |
+          for dir in plugins/*/; do
+            echo "== $dir"
+            claude plugin validate --strict "$dir"
+          done
