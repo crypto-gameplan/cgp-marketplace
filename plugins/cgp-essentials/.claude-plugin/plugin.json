@@ -1,7 +1,7 @@
 {
   "name": "cgp-essentials",
-  "version": "0.2.0",
-  "description": "Crypto Gameplan's everyday skills: humanizer, writing-for-agents, grill-me, tdd and research.",
+  "version": "0.3.0",
+  "description": "Crypto Gameplan's everyday skills: cgp-humanizer, cgp-writing-for-agents, cgp-grill-me, cgp-tdd, cgp-research, cgp-codebase-design and cgp-code-review.",
   "author": {
     "name": "Crypto Gameplan",
     "url": "https://github.com/crypto-gameplan"
