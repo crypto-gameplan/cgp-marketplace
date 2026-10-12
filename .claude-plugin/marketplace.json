@@ -43,6 +43,26 @@
         "sha": "e9ab132d4575390ecbadfc54649712432b1a3351"
       },
       "category": "security"
+    },
+    {
+      "name": "humanizer",
+      "description": "Rewrites AI-sounding text so it reads like a person wrote it, without changing what it says. By blader (Siqi Chen).",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/blader/humanizer.git",
+        "sha": "225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8"
+      },
+      "category": "productivity"
+    },
+    {
+      "name": "mattpocock-skills",
+      "description": "Matt Pocock's engineering skills: grill-me, writing-for-agents, TDD, research, specs and tickets, code review and more.",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/mattpocock/skills.git",
+        "sha": "24fe0ef7737efae15c87225755e9f6f5965e4888"
+      },
+      "category": "development"
     }
   ]
 }
