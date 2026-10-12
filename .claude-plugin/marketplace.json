@@ -34,6 +34,16 @@
       "category": "productivity"
     },
     {
+      "name": "cgp-files",
+      "description": "An IDE-style file tree beside your session: git status per file and folder, a project-wide search, and rows that glow where Claude reads, writes and commits.",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/crypto-gameplan/cgp-files.git",
+        "ref": "stable"
+      },
+      "category": "productivity"
+    },
+    {
       "name": "blast-radius",
       "description": "Holds risky shell commands (rm -rf, git reset --hard, git clean, force push, migrations) and shows what they would change, with Proceed and Cancel buttons. By Anthropic.",
       "source": {
