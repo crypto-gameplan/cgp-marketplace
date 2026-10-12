@@ -1,6 +1,6 @@
 {
   "name": "cgp-essentials",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Crypto Gameplan's everyday skills: cgp-knowledge, cgp-challenge, cgp-natural-writing, cgp-agent-docs, cgp-research, cgp-test-first, cgp-architecture, cgp-review and cgp-docker.",
   "author": {
     "name": "Crypto Gameplan",
