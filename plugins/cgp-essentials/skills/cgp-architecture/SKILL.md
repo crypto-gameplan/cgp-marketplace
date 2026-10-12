@@ -1,15 +1,27 @@
 ---
 name: cgp-architecture
-description: Shared vocabulary for designing deep modules. Use when the user wants to design or improve a module's interface, find deepening opportunities, decide where a seam goes, make code more testable or AI-navigable, or when another skill needs the deep-module vocabulary.
+description: Structure code so it stays easy to change, test and understand, using deep modules (a lot of behaviour behind a small interface). Use when code has become messy or hard to change, a file is too big, the user asks how to organise or structure a project, wants to clean up or restructure code, make it more testable or easier for AI to work with, design a module's interface, decide where a seam goes, or when another skill needs the deep-module vocabulary.
 ---
 
 # Codebase Design
 
 Design **deep modules**: a lot of behaviour behind a small interface, placed at a clean seam, testable through that interface. Use this language and these principles wherever code is being designed or restructured. The aim is leverage for callers, locality for maintainers, and testability for everyone.
 
+## Working with the person
+
+Many people using this are not professional programmers. The glossary below is how *you* think and how you write to other agents; with the person, describe the code by what it does ("all the Telegram code in one file, so changing the message format touches one place"), not with module, seam, adapter, depth, leverage or locality. If a word is unavoidable, explain it in a few plain words the first time.
+
+When they ask you to clean up or restructure code:
+
+1. **Look first.** Read the code yourself and find the two or three changes that help most: where a change today forces edits in many places, where logic is tangled with the database, network or UI so it cannot be tested, where one file does unrelated jobs. Ignore cosmetic issues.
+2. **Propose briefly.** For each change: what it is, in plain words, and what it makes easier for them. Recommend an order. Ask at most a few questions, each with your recommended answer, and only about what the code cannot tell you (is a second payment provider planned?).
+3. **Protect behaviour first.** Before moving code, make sure tests cover what it does today; if there are none, add a few through the outside (the `cgp-test-first` skill), and run them. Restructuring must not change what the app does.
+4. **Change in small steps**, running the tests after each. Keep public behaviour, file formats, configuration and command names the same unless the person agreed otherwise.
+5. **Hand over** in their language, with its real characters (ä, ö, ü, ß in German): what moved where (one line per change), what got easier, proof that the tests still pass, and what you deliberately left alone. Anything they must do themselves (fill in a setting, get a webhook URL or key) comes with where to get it and how, in plain steps.
+
 ## Glossary
 
-Use these terms exactly: don't substitute "component," "service," "API," or "boundary." Consistent language is the whole point.
+Among agents and in your own reasoning, use these terms exactly: don't substitute "component," "service," "API," or "boundary." Consistent language is the whole point.
 
 **Module**: anything with an interface and an implementation. Deliberately scale-agnostic: a function, class, package, or tier-spanning slice. _Avoid_: unit, component, service.
 

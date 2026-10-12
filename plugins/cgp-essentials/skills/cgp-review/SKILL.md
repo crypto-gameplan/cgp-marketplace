@@ -1,87 +1,64 @@
 ---
 name: cgp-review
-description: "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes: Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/spec asked for?). Runs both reviews in parallel sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, or asks to \"review since X\"."
+description: "Review code changes the way a careful senior developer would and explain the findings in plain words: is it safe (secrets, data loss, injection), does it do what was asked, and does it follow the project's standards and keep the code clean. Finds what to compare against by itself, runs the reviews in parallel sub-agents, and offers to fix what it found. Use when the user wants a branch, a PR or their latest changes reviewed, asks \"is this OK?\", \"check my code before I push\", \"review since X\", or wants a second opinion on what Claude just built."
 ---
 
-Two-axis review of the diff between `HEAD` and a fixed point the user supplies:
+The people using this skill are often not professional programmers. They cannot judge a diff themselves, so the review has to tell them what matters, how bad it is, and what to do, in plain words. Do the legwork yourself and ask only what the repository cannot tell you.
 
-- **Standards**: does the code conform to this repo's documented coding standards?
-- **Spec**: does the code faithfully implement the originating issue / spec?
+The review has three **axes**, each run by its own sub-agent so they do not blur into each other:
 
-Both axes run as **parallel sub-agents** so they don't pollute each other's context, then this skill aggregates their findings.
+- **Safety**: can this change leak a secret, lose or corrupt data, let a stranger in, or cost money by accident?
+- **Spec**: does the change do what was asked, all of it and nothing else?
+- **Standards**: does it follow the project's documented rules and stay clean enough to change later?
 
-Find the originating issue or spec in the repo or the issue tracker the project uses; if you cannot find it, ask the user where it is.
+## 1. Find what to review
 
-## Process
+Decide the starting point yourself:
 
-### 1. Pin the fixed point
+- The person named one (a commit, a branch, `main`, "since yesterday"): use it.
+- Uncommitted changes exist (`git status`): review those, plus commits not yet on the default branch.
+- Otherwise: everything on this branch since it left the default branch (`git merge-base HEAD origin/main`, or `main`/`master` locally).
 
-Whatever the user said is the fixed point (a commit SHA, branch name, tag, `main`, `HEAD~5`, etc.). If they didn't specify one, ask for it.
+Capture the diff command once (`git diff <start>...HEAD`, plus `git diff HEAD` for uncommitted work) and the commit list (`git log <start>..HEAD --oneline`). Check that the start resolves and the diff is not empty before spawning anything; a bad ref should fail here, not in three sub-agents. Say in one line what you are reviewing ("the 4 commits on this branch plus your unsaved changes in 2 files").
 
-Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, so the comparison is against the merge-base). Also note the list of commits via `git log <fixed-point>..HEAD --oneline`.
+## 2. Find the spec
 
-Before going further, confirm the fixed point resolves (`git rev-parse <fixed-point>`) and the diff is non-empty. A bad ref or empty diff should fail here, not inside two parallel sub-agents.
+What was the change supposed to do? Look, in this order: issue references in commits (`#123`, `Closes #45`), a path the person gave, a spec or plan under `docs/`, `specs/` or `.scratch/` matching the branch, the request earlier in this conversation. If none exists, write down the intent you read from the commit messages and code, label it as your assumption, and review against that; tell the person so they can correct it. Do not stop the review to ask.
 
-### 2. Identify the spec source
+## 3. Find the standards
 
-Look for the originating spec, in this order:
+Anything in the repo that says how code should be written: `CLAUDE.md`, `AGENTS.md`, `CODING_STANDARDS.md`, `CONTRIBUTING.md`, linter and formatter configs. A documented repo rule always wins over the baselines below.
 
-1. Issue references in the commit messages (`#123`, `Closes #45`, GitLab `!67`, etc.), fetched via the workflow in `docs/agents/issue-tracker.md`.
-2. A path the user passed as an argument.
-3. A spec file under `docs/`, `specs/`, or `.scratch/` matching the branch name or feature.
-4. If nothing is found, ask the user where the spec is. If they say there isn't one, the **Spec** sub-agent will skip and report "no spec available".
+## 4. Spawn the three sub-agents in parallel
 
-### 3. Identify the standards sources
+Give each one the diff command, the commit list and its brief. Each reports under 400 words, every finding with file and line, a severity, and a one-line fix.
 
-Anything in the repo that documents how code should be written, such as `CODING_STANDARDS.md` or `CONTRIBUTING.md`.
+**Safety** brief: paste the [safety baseline](references/baselines.md#safety-baseline). "Report every place the diff could leak a secret, lose or corrupt data, let someone unauthorised in or act for them, or run up costs. Also check that error cases are handled where failure is likely (network, files, user input). Severity: **must fix** when it can do real damage, **should fix** otherwise."
 
-On top of whatever the repo documents, the Standards axis always carries the **smell baseline** below: a fixed set of Fowler code smells (_Refactoring_, ch.3) that applies even when a repo documents nothing. Two rules bind it:
+**Spec** brief: paste or point to the spec (or your assumed intent, marked as such). "Report (a) requirements missing or only partly done, (b) behaviour nobody asked for, (c) requirements that look done but work wrongly. Quote the spec line for each."
 
-- **The repo overrides.** A documented repo standard always wins; where it endorses something the baseline would flag, suppress the smell.
-- **Always a judgement call.** Each smell is a labelled heuristic ("possible Feature Envy"), never a hard violation. Like any standard here, skip anything tooling already enforces.
+**Standards** brief: list the standards files and paste the [smell baseline](references/baselines.md#smell-baseline). "Report (a) breaches of a documented rule, citing file and rule, and (b) baseline smells, each a judgement call. Skip anything a linter or formatter already enforces. Severity: documented-rule breaches can be **should fix**; smells are **could improve**."
 
-Each smell reads *what it is* → *how to fix*; match it against the diff:
+If tests exist, run them yourself while the sub-agents work and note the result.
 
-- **Mysterious Name**: a function, variable, or type whose name doesn't reveal what it does or holds. → rename it; if no honest name comes, the design's murky.
-- **Duplicated Code**: the same logic shape appears in more than one hunk or file in the change. → extract the shared shape, call it from both.
-- **Feature Envy**: a method that reaches into another object's data more than its own. → move the method onto the data it envies.
-- **Data Clumps**: the same few fields or params keep travelling together (a type wanting to be born). → bundle them into one type, pass that.
-- **Primitive Obsession**: a primitive or string standing in for a domain concept that deserves its own type. → give the concept its own small type.
-- **Repeated Switches**: the same `switch`/`if`-cascade on the same type recurs across the change. → replace with polymorphism, or one map both sites share.
-- **Shotgun Surgery**: one logical change forces scattered edits across many files in the diff. → gather what changes together into one module.
-- **Divergent Change**: one file or module is edited for several unrelated reasons. → split so each module changes for one reason.
-- **Speculative Generality**: abstraction, parameters, or hooks added for needs the spec doesn't have. → delete it; inline back until a real need shows.
-- **Message Chains**: long `a.b().c().d()` navigation the caller shouldn't depend on. → hide the walk behind one method on the first object.
-- **Middle Man**: a class or function that mostly just delegates onward. → cut it, call the real target direct.
-- **Refused Bequest**: a subclass or implementer that ignores or overrides most of what it inherits. → drop the inheritance, use composition.
+## 5. Report
 
-### 4. Spawn both sub-agents in parallel
+Write in the language the person wrote to you. Use the language's real characters (ä, ö, ü, ß in German), not ASCII stand-ins. Start with a verdict in one or two sentences: can this go in as it is, after small fixes, or not yet.
 
-**Standards sub-agent prompt** should include:
+Then one section per axis (**Safety**, **Spec**, **Standards**), findings ordered by severity, each as:
 
-- The full diff command and commit list.
-- The list of standards-source files you found in step 3, **plus the smell baseline from step 3** pasted in full (the sub-agent has no other access to it).
-- The brief: "Report, per file/hunk where relevant, (a) every place the diff violates a documented standard: cite the standard (file + the rule); and (b) any baseline smell you spot: name it and quote the hunk. Distinguish hard violations from judgement calls: documented-standard breaches can be hard, but baseline smells are always judgement calls, and a documented repo standard overrides the baseline. Skip anything tooling enforces. Under 400 words."
+> **must fix** · `src/orders.ts:42` · The Stripe key is written into the code, so anyone who sees the repository can charge cards. → Move it to `.env` and rotate the key in Stripe.
 
-**Spec sub-agent prompt** should include:
+Keep the axes separate and do not rank across them: code can follow every rule and still do the wrong thing, or do exactly the right thing in a way that breaks the project's rules, and mixing them lets one hide the other. Say "nothing found" for an empty axis.
 
-- The diff command and commit list.
-- The path or fetched contents of the spec.
-- The brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong. Quote the spec line for each finding. Under 400 words."
+Explain why each finding matters in the person's terms (what could go wrong for them), not in pattern names. Write the fix the same way: say what the code should do ("if Stripe fails, show an error and leave the order unchanged"), not the construct ("wrap it in try/catch"); the person will ask you to make the fix, so they need to understand the outcome, not the code. HTTP status codes, library calls and terms like idempotency stay out of the report unless they come with plain words. A smell name like "Feature Envy" may follow in brackets for those who want to look it up; the sentence before it must stand alone.
 
-If the spec is missing, skip the Spec sub-agent and note this in the final report.
+End with the test result, then offer to fix: "Shall I fix the 2 must-fix and 3 should-fix findings now? ➡️ Yes, I'd do it in that order and rerun the tests." Fix only after a yes.
 
-### 5. Aggregate
-
-Present the two reports under `## Standards` and `## Spec` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings, because the two axes are deliberately separate (see _Why two axes_).
-
-End with a one-line summary: total findings per axis, and the worst issue _within each axis_ (if any). Don't pick a single winner across axes: that's the reranking the separation exists to prevent.
-
-## Why two axes
-
-A change can pass one axis and fail the other:
-
-- Code that follows every standard but implements the wrong thing → **Standards pass, Spec fail.**
-- Code that does exactly what the issue asked but breaks the project's conventions → **Spec pass, Standards fail.**
-
-Reporting them separately stops one axis from masking the other.
+| Word | Plain words |
+|---|---|
+| diff | the lines that changed |
+| commit / branch | a saved step / a line of work in git |
+| spec | the description of what the change should do |
+| secret | a password, API key or token; anyone who has it can act as you |
+| injection | user input that ends up run as a command or database query |

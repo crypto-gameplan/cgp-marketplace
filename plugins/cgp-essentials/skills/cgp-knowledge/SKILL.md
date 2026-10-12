@@ -14,7 +14,16 @@ Help the person pick the **smallest rung** that serves their knowledge, then bui
 
 Rungs 4 to 6 are not strictly higher than each other; they answer different shapes of knowledge. Climb only when a concrete need breaks the rung below, and say which need it was. Many people arrive asking for RAG when a context file or an OKF bundle serves them better; many others need a database and call it RAG.
 
-"Rung" and "ladder" are your working words. With the person, name the options plainly ("a short note in CLAUDE.md", "a database Claude queries", "RAG").
+"Rung" and "ladder" are your working words. With the person, name the options plainly ("a short note in CLAUDE.md", "a database Claude queries", "RAG"). Write in the language the person wrote to you, with its real characters (ä, ö, ü, ß in German), and give every technical word a few plain words the first time it appears, or avoid it:
+
+| Word | Plain words |
+|---|---|
+| CLAUDE.md / AGENTS.md | a short file Claude reads at the start of every session |
+| skill | a guide Claude loads only for the tasks that need it |
+| RAG | the text is cut into pieces and the pieces that sound most similar to the question are looked up |
+| embeddings, vector database | the technique and the storage behind RAG |
+| OKF bundle | a folder of curated notes, each with its source, date and how much to trust it |
+| MCP server / tool | a connector that lets Claude query a database or service |
 
 ## 1. Look before you ask
 

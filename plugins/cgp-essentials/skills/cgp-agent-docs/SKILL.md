@@ -1,11 +1,19 @@
 ---
 name: cgp-agent-docs
-description: Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md.
+description: Writing documents for agents. Use when creating or editing skills, writing or improving AGENTS.md or CLAUDE.md, or when someone asks how to make Claude or Codex remember project rules, follow their conventions, or stop repeating the same mistake.
 ---
 
 Reference for writing any document an agent consumes: a skill, an `AGENTS.md` / `CLAUDE.md`, a doc reached by a pointer. The packaging differs; the writing does not: the same levers make each one predictable, since the agent takes the same _process_ every run rather than producing the same output.
 
 When the document you're writing is a skill, read [`SKILL-MECHANICS.md`](SKILL-MECHANICS.md) for frontmatter, invocation choice, and router skills.
+
+## Working with the person
+
+Many people asking for this are not professional programmers. The vocabulary below (context pointer, load, leading word, sediment) is for your own work; with the person, say what the document does for them ("Claude will now run the tests before saying it's done").
+
+- **Do the legwork.** Read the project yourself: how it is started, tested and deployed (scripts, configs, README), its conventions, and what already exists in `CLAUDE.md` / `AGENTS.md`. Verify every command you write down by running it, or mark it as unverified. Ask only what the files cannot tell you (rules that live in their head, things that went wrong before), at most three questions in plain words (no tool names like linter or mock without a few words of explanation), each with your recommended answer.
+- **A good `CLAUDE.md` / `AGENTS.md` for a small project is short**, often under 60 lines: what the project is in one line, the commands to run, test and build it, the rules an agent would otherwise get wrong, each with its reason in the same line (the reason lets the agent handle cases the rule does not name), and pointers to longer docs. Leave out what the agent finds by looking at the code; restating it only goes stale.
+- **Hand over** in their language, with its real characters (ä, ö, ü, ß in German): what you wrote or changed, one line per section and what it changes in how Claude works, which commands you verified, and how to add a rule later (one line, with the reason).
 
 ## Context pointers
 
