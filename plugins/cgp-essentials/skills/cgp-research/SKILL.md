@@ -15,7 +15,7 @@ Many people using this are not professional programmers. They need a trustworthy
 
 ## Tell the person
 
-In their language, short. The person reads this reply, not the file. Keep the technical detail (headers, parameter names, endpoint paths, protocol names) in the file; the reply carries only what they need to decide and to take the first step, and every term that remains gets a few plain words:
+In their language, short. The person reads this reply, not the file. Keep the technical detail (headers, parameter names, endpoint paths, protocol names) in the file; the reply carries only what they need to decide and to take the first step, and every term that remains gets a few plain words. Check especially the words your reasons and code rest on: if a library is "async", say what that means for them ("you write `async`/`await` in front of some lines; slightly more to learn, but the bot can do several things at once"); the same for any word in a snippet they will copy:
 
 - **The answer** and, when they asked which option to pick, **your recommendation** with the one or two reasons that decide it for them.
 - **The first step**: what they need to start (an account, a key, a token, an install command) and where to get it, in plain steps ("open Telegram, message @BotFather, send /newbot; it replies with your bot token, the password your script uses").
