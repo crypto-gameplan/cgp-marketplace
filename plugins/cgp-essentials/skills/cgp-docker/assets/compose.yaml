@@ -1,0 +1,57 @@
+# Starts the app and its database with one command: docker compose up -d
+# Adapt: the app port, the variables the app reads, and the services it needs (delete what it does not use).
+
+services:
+  app:
+    build: .
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      # Inside compose, services reach each other by service name ("postgres"), never "localhost".
+      DATABASE_URL: postgres://${POSTGRES_USER:?set POSTGRES_USER in .env}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@postgres:5432/${POSTGRES_DB:?set POSTGRES_DB in .env}
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      # Postgres 18 images keep their data under /var/lib/postgresql (17 and older: /var/lib/postgresql/data).
+      - postgres-data:/var/lib/postgresql
+    # No "ports:" here: the app reaches the database inside Docker, and a Postgres already
+    # installed on this computer keeps port 5432. To look into the database with a tool, add:
+    # ports:
+    #   - "127.0.0.1:5433:5432"
+    healthcheck:
+      # -h 127.0.0.1 checks the network port. Without it, the check passes during the very first
+      # start while Postgres is still setting up, and the app connects too early and crashes.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  # redis:
+  #   image: redis:8-alpine
+  #   command: ["redis-server", "--appendonly", "yes"]
+  #   volumes:
+  #     - redis-data:/data
+  #   healthcheck:
+  #     test: ["CMD", "redis-cli", "ping"]
+  #     interval: 5s
+  #     timeout: 3s
+  #     retries: 10
+  #   restart: unless-stopped
+
+volumes:
+  # Named volumes survive "docker compose down". Only "docker compose down -v" deletes them.
+  postgres-data:
+  # redis-data:

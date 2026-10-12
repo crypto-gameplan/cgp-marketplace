@@ -1,0 +1,16 @@
+# Keeps secrets, local installs and junk out of the image. Docker reads only this file, not .gitignore.
+.env
+.env.*
+!.env.example
+.git
+node_modules
+npm-debug.log*
+dist
+build
+.next
+coverage
+.DS_Store
+Dockerfile*
+compose*.yaml
+docker-compose*.yml
+DOCKER.md
