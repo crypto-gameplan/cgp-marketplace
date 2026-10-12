@@ -32,6 +32,7 @@ Run `/reload-plugins` or restart Claude Code afterwards.
 |---|---|---|
 | `cgp-essentials` | The skills Crypto Gameplan uses every day | [plugins/cgp-essentials](plugins/cgp-essentials) |
 | `cgp-effort` | Picks the reasoning effort for every prompt, with a prompt-cache countdown and one-click Compact and Handoff | [crypto-gameplan/cgp-effort](https://github.com/crypto-gameplan/cgp-effort) |
+| `blast-radius` | Holds risky shell commands such as `rm -rf`, `git reset --hard` or a force push and shows what they would change, with Proceed and Cancel. A mod by Anthropic; needs Claude Code 2.1.287 or later | [anthropics/claude-code-playground](https://github.com/anthropics/claude-code-playground/tree/main/claude-code/mods/blast-radius), pinned to a checked commit |
 
 ## Maintaining the catalog
 

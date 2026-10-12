@@ -22,6 +22,17 @@
         "ref": "stable"
       },
       "category": "productivity"
+    },
+    {
+      "name": "blast-radius",
+      "description": "Holds risky shell commands (rm -rf, git reset --hard, git clean, force push, migrations) and shows what they would change, with Proceed and Cancel buttons. By Anthropic.",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/anthropics/claude-code-playground.git",
+        "path": "claude-code/mods/blast-radius",
+        "sha": "e9ab132d4575390ecbadfc54649712432b1a3351"
+      },
+      "category": "security"
     }
   ]
 }
