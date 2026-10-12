@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "cgp-essentials",
-      "description": "Crypto Gameplan's everyday skills: cgp-humanizer, cgp-writing-for-agents, cgp-grill-me, cgp-tdd, cgp-research, cgp-codebase-design and cgp-code-review.",
+      "description": "Crypto Gameplan's everyday skills: cgp-knowledge, cgp-challenge, cgp-natural-writing, cgp-agent-docs, cgp-research, cgp-test-first, cgp-architecture and cgp-review.",
       "source": "./plugins/cgp-essentials",
       "category": "productivity"
     },

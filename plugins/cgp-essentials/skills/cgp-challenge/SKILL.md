@@ -1,6 +1,6 @@
 ---
-name: cgp-grilling
-description: Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
+name: cgp-challenge
+description: Challenge a plan, decision or idea through a relentless interview, one round of questions at a time, until it holds up. Use when the user wants to stress-test their thinking, asks to be challenged or grilled, or wants a plan poked for holes before acting on it.
 ---
 
 Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.
