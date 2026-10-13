@@ -46,7 +46,13 @@ Without a sample, take the voice from the kind of text. Blog posts, essays, opin
 
 ### What to return
 
-**Pasted text (default).** Return the draft, a short list of remaining patterns, and the final rewrite.
+**Pasted text (default).** The draft and the pattern list are your working steps, not the reply. Return:
+
+1. The final rewrite first, ready to paste. Where it needs a detail you do not have (a link, a date, a price), put a visible placeholder in the text itself, such as `[Link]`, so nothing is posted half-finished.
+2. At most three short lines on what you changed, in plain words the writer would use ("less advertising tone", "shorter sentences"), without pattern names or section numbers.
+3. Questions for the missing details, if any.
+
+Write in the language of the text, with its real characters and its own quotation marks (German „…“, French « … »). When the writer says the language is not their first, use short sentences and common words in the rewrite and in your reply.
 
 **File mode.** When the user names a file, run the full process but write only the final text to the file. Change prose only. Keep code blocks, inline code, commands, paths, YAML metadata, data, and link targets unchanged. Then give the user a short summary.
 
@@ -304,7 +310,7 @@ Templates and visual editors also produce clean formatting. The tell is decorati
 
 ### 21. Curly quotation marks
 
-**Problem:** Curly quotes (“...”) appear where the writer or target format uses straight quotes ("..."). Most editors auto-curl, so this is *weak alone*.
+**Problem:** In English text, curly quotes (“...”) appear where the writer or target format uses straight quotes ("..."). Other languages keep their own marks: German uses „…“, and straight quotes there are the tell. Most editors auto-curl, so this is *weak alone*.
 **Before:**
 > He said “the project is on track” but others disagreed.
 **After:**

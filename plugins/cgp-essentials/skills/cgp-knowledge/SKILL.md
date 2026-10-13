@@ -21,7 +21,13 @@ Rungs 4 to 6 are not strictly higher than each other; they answer different shap
 | CLAUDE.md / AGENTS.md | a short file Claude reads at the start of every session |
 | skill | a guide Claude loads only for the tasks that need it |
 | RAG | the text is cut into pieces and the pieces that sound most similar to the question are looked up |
-| embeddings, vector database | the technique and the storage behind RAG |
+| embeddings, vector database | the technique and the storage behind RAG: each piece of text becomes a list of numbers, so texts with similar meaning can be found even when the words differ |
+| full-text search (for example SQLite FTS5) | a search index like a book's index: it finds every place a word appears, fast |
+| token | a piece of a word; about 4 characters, the unit AI models count text in |
+| index file | one list with a line per document, so Claude knows what exists and where |
+| markdown | plain text files with simple formatting, which Claude reads best |
+
+A term the person used themselves ("brauch ich RAG?") needs the explanation too: they often ask because they heard the word but do not know what it means. Talk to the person as a capable adult who is new to this field, never about what they do not know. Do not ask them to run commands to measure their files; ask in everyday terms ("roughly how many files, and are the PDFs text you can select or scanned pages?") or find out yourself when there is a project.
 | OKF bundle | a folder of curated notes, each with its source, date and how much to trust it |
 | MCP server / tool | a connector that lets Claude query a database or service |
 
@@ -43,7 +49,7 @@ Read [references/options.md](references/options.md#dimensions) first: it lists t
 - **Deciding**: an open dimension where a different answer would pick a different rung. These are your questions.
 - **Detail**: anything that only shapes the build (stack, hosting, schedule, naming, team size). Make a sensible assumption, label it as an assumption, and settle it during the build.
 
-Ask the deciding questions in **one round of at most four**. Number each, give your recommended answer, and word it so "yes" accepts it:
+Ask the deciding questions in **one round of at most four**, one thing per question. Number each, give your recommended answer, and word it so "yes" accepts it:
 
 ```
 ❓ **Q1** - **<title>**: <question, with choices where they help>
@@ -55,16 +61,19 @@ When nothing is deciding (the message already makes the choice clear), skip the 
 
 ## 3. Decide
 
-Lead with the recommendation in one or two plain sentences, then:
+Answer in this shape, each part a few lines, together under 450 words:
 
+- **Recommendation** in one or two plain sentences: what to do and what not to build.
 - **Why**, tied to the person's own words and the facts you found.
-- **Why not** the option they asked about, if you did not pick it, plus at most two others they would plausibly consider. One line each. Options nobody would weigh here need no rejection.
-- **What the first version covers**: every kind of question the person mentioned gets a path in the first version, not a later phase. Lists and counts over documents ("which reports covered SOL in 2024") need a queryable catalog beside search; numbers need a database.
-- **When to revisit**: the concrete signal that would change the choice (for example "when the folder passes about 2,000 entries or answers start missing documents that exist").
-- **Effort and running cost** in plain words.
-- **Assumptions** you made, so they can correct them. Name a convention only when it changes this answer: the time zone that decides day and month boundaries when the questions are about periods, the currency when sums are compared, the cost-basis method when profit is computed. Details the person never raised and the answer does not need stay out.
+- **Why not** the option they asked about, in one or two lines. Others only if they would plausibly weigh them, one line each.
+- **First step**: what happens first, and that every kind of question they mentioned is covered from the start. Lists and counts over documents ("which reports covered SOL in 2024") need a list of all documents beside search; numbers need a database.
+- **When to change course**: the concrete signal, for example "when Claude misses things you know are in the notes".
+- **Effort and cost** in one line.
+- **Assumptions**: at most three, only those that would change the answer.
 
-Keep the recommendation under about 500 words, wherever its parts appear in your answer. Detail for the build belongs in the build. State facts only from the person, the environment or a source you name; a tax rule, a price or someone's stack is an assumption until one of those confirms it.
+Say each point once. Name techniques by what they do ("a word search over your files", "search by meaning"), and if a technical name must appear, explain it right there, every section included; never drop in tool names like FTS5, ripgrep or pgvector for the person to decode. Detail for the build belongs in the build. State facts only from the person, the environment or a source you name; a tax rule, a price or someone's stack is an assumption until one of those confirms it.
+
+Before you send it, reread it as the person would: someone who does not program. Find every word they would not use themselves, including synonyms and everyday tech words (retrieval, pipeline, hook, script, repo, index), and replace it with what it does or explain it in a few words where it first appears.
 
 Wait for the person to accept or adjust it.
 
